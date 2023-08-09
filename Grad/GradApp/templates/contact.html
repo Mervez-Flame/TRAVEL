@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="stylesheet" href="{% static 'contact.css' %}">
+</head>
+<body>
+    <section class="contact">
+        <div class="content">
+            <h2>Contact us</h2>
+        <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure veniam delectus, adipisci, quidem ab quos voluptas minus, optio nobis cum corrupti nulla incidunt expedita quod ex mollitia vitae nihil omnis?\
+        </p>
+        </div>
+        <div class="container">
+            <div class="contactinfo">
+                <div class="box"> 
+                    <div class="icon"><i class='bx bxs-map'></i></div>
+                    <div class="text">
+                        <h3>Address</h3>
+                        <p>NO 6 louis solomon close Victoria island <br>Lagos Nigeria</p>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="icon"><i class='bx bxs-phone'></i></div>
+                    <div class="text">
+                        <h3>Phone</h3>
+                        <p>+2430714513200</p>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="icon"><i class='bx bx-envelope'></i></div>
+                    <div class="text">
+                        <h3>Email</h3>
+                        <p>AeroSkyExpress@Gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="contactform">
+                <form>
+                <h2>Send A Message</h2>
+                <div class="inputBox">
+                <input type="text" name="" required="required">
+                <span>Full Name</span>
+                </div>
+                <div class="inputBox">
+                    <input type="text" name="" required="required">
+                    <span>Email</span>
+                    </div>
+                    <div class="inputBox">
+                        <textarea required="required"></textarea>
+                        <span>Type your Message...</span>
+                        </div>
+                        <div class="inputBox">
+                    <input type="Submit" name="" value="Send">
+                            </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

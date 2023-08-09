@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>AeroSkyXpress</title>
+</head>
+<body>
+    <nav>
+        <div class="nav__logo">AeroSkyExpress</div>
+        <ul class="nav__links">
+          <li class="link"><a href="#">Home</a></li>
+          <li class="link"><a href="#">About</a></li>
+          <li class="link"><a href="#">Offers</a></li>
+          <li class="link"><a href="#">Seats</a></li>
+          <li class="link"><a href="#">Destinations</a></li>
+        </ul>
+        <button class="btn">Contact</button>
+        {%if user.is_authenticated%}
+        <button class="btn"><a href="logout">Logout</a></button>
+        {%else%}
+        <button class="btn"><a href="loginPage">Login or SignUp</a></button>
+        {%endif%}
+      </nav>
+      <header class="section_container header_container">
+        <h1 class="section_header">Tour the world with us</h1>
+        <img src="static/images/header.jpg" alt="Header"/>
+    </header>
+
+    <section class="section_container booking_container">
+        <div class="booking__nav">
+            <span>Economy Class</span>
+            <span>Business Class</span>
+            <span>First Class</span>
+          </div>
+    </section>
+</body>
