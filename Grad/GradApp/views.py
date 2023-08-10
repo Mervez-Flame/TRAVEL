@@ -67,7 +67,9 @@ def Bookings(request):
         origin = request.POST['origin']
         destination = request.POST['destination']
         departure_date = request.POST['departure_date']
-        num_passengers = int(request.POST['passengers'])
+        num_passengers = request.POST['passengers']
+    else:
+        pass
     return redirect(request, 'home.html')
 
 
