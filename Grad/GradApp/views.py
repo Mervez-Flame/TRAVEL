@@ -35,10 +35,10 @@ def login (request):
 
 def signup(request):
     if request.method == 'POST':
-        username = request.POST('username')
-        email = request.POST('email')
-        password = request.POST('password1')
-        confirmPassword = request.POST('password2')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password1')
+        confirmPassword = request.POST.get('password2')
 
         if password == confirmPassword:
             if User.objects.filter(username=username).exists():
@@ -59,18 +59,26 @@ def signup(request):
 def signUpPage(request):
     return render(request, 'signUpPage.html')
 
+def register(request):
+    return render(request, 'register.html')
+
 def booking(request):
     return render(request, 'Booking.html')
 
 def Bookings(request):
-    if request.method == 'POST':
-        origin = request.POST['origin']
-        destination = request.POST['destination']
-        departure_date = request.POST['departure_date']
-        num_passengers = request.POST['passengers']
-    else:
-        pass
-    return redirect(request, 'home.html')
+    flight = Flight()
+    booking = Booking()
+    
+    #if request.method == 'POST':
+
+    booking.origin = flight.origin
+    booking.destination = flight.destination
+    booking.departure_date = request.GET['departure_date']
+    booking.num_passengers = request.GET['num_passengers']
+    return redirect( 'home')
+#else:
+    print("it didt work")
+
 
 
 #flights = Flight.objects.filter(origin=origin, destination=destination, departure_date__gte=departure_date)

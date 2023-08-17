@@ -14,8 +14,8 @@ class Flight(models.Model):
     slot_left = models.IntegerField(default=0)
     is_cancelled = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f"{self.flight_number} - {self.origin} to {self.destination}"
+    #def __str__(self):
+        #return f"{self.flight_number} - {self.origin} to {self.destination}"
 
 class Booking(models.Model):
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE)
@@ -25,5 +25,5 @@ class Booking(models.Model):
     num_passengers = models.PositiveIntegerField()
     booking_date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.passenger_name} - {self.flight}"
+    #def __str__(self):
+        #return f"{self.passenger_name} - {self.flight}"

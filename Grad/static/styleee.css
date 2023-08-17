@@ -112,18 +112,18 @@
 
 @keyframes changetext{
     0%{content: "Qatar";}
-    10%{content: "Spain";}
-    20%{content: "United States";}
-    30%{content: "China";}
-    40%{content: "Dubai";}
-    50%{content: "Pakistan";}
-    60%{content: "Italy";}
-    70%{content: "Turkey";}
-    80%{content: "Mexico";}
-    90%{content: "Germany";}
-    100%{content: "United kingdom";}
-    110%{content: "Zimbabwe";}
-    120%{content: "South AFrica";}
+    30%{content: "Spain";}
+    60%{content: "United States";}
+    90%{content: "China";}
+    120%{content: "Dubai";}
+    150%{content: "Pakistan";}
+    180%{content: "Italy";}
+    210%{content: "Turkey";}
+    240%{content: "Mexico";}
+    270%{content: "Germany";}
+    300%{content: "United kingdom";}
+    330%{content: "Zimbabwe";}
+    350%{content: "South AFrica";}
 } 
 .home .content p{
     color: white;
