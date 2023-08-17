@@ -60,6 +60,27 @@ def signUpPage(request):
     return render(request, 'signUpPage.html')
 
 def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        
+        if password1 == password2:
+            if User.objects.filter(email=email).exists():
+                messages.info(request, 'Email Already Used')
+                return redirect('register')
+        elif User.object.filter(username=username).exists():
+            messages.info(request, 'Username Already Exists')
+            return redirect('register')
+        else:
+            user = User.objects.create_user(username=username, email=email, password=password1)
+            user.save();
+            return redirect(login)
+    else:
+        messages.info(request, 'Password Not The Same')
+        return redirect(request, register)
+        
     return render(request, 'register.html')
 
 def booking(request):
@@ -71,7 +92,7 @@ def Bookings(request):
     
     #if request.method == 'POST':
 
-    booking.origin = flight.origin
+    ori = booking.origin = flight.origin
     booking.destination = flight.destination
     booking.departure_date = request.GET['departure_date']
     booking.num_passengers = request.GET['num_passengers']
