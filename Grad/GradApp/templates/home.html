@@ -60,14 +60,14 @@
                 <a class="nav-link" href="contact">Contact</a>
               </li>
             </ul>
-            {%if  user.auth is authenticated %}
+            {%if  user.is_authenticated %}
             <div class="input-container">
               <i class='bx bx-search-alt-2'></i>
               <input type="text" placeholder="Search..."/>
           </div>          
-            <a href="loginPage"><button class="btncon">Logout</button></a>
+          <a href="{% url 'logout' %}">Logout<button class="btncon">Logout</button></a>
             {%else %}
-            <a href="home"><button class="btncon">Signup/Login</button></a>
+            <a href="{% url 'register' %}"><button class="btncon">Signup/Login</button></a>
             {%endif%}
           </div>
         </div>
