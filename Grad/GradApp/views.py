@@ -79,7 +79,7 @@ def register(request):
             return redirect(login)
     else:
         messages.info(request, 'Password Not The Same')
-        return redirect(request, register)
+        return redirect('register')
         
     return render(request, 'register.html')
 
