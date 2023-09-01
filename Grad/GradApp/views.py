@@ -33,34 +33,10 @@ def login_view(request):
         else:
             messages.error(request, "Wrong username or password")
             return redirect('loginPage')  # Make sure 'loginPage' is a valid URL name
-    return render(request, 'home.html')
+    return redirect('home')
 
-
-# def signup(request):
-#     if request.method == 'POST':
-#         username = request.POST.get('username')
-#         email = request.POST.get('email')
-#         password = request.POST.get('password1')
-#         confirmPassword = request.POST.get('password2')
-
-#         if password == confirmPassword:
-#             if User.objects.filter(username=username).exists():
-#                 messages.info(request, 'Username already used')
-#                 return redirect('signup')
-#             else:
-#                 user = User.objects.create_user(
-#                     username=username, password=password)
-#                 user.save()
-#                 messages.success(request, 'Signup Successfully')
-#                 return redirect('loginPage')
-#         else:
-#             messages.error(request, 'Password not the same')
-#             return redirect('signUpPage')
-#     else:
-#         return render(request, 'signUpPage.html')
-    
-# def signUpPage(request):
-#     return render(request, 'register.html')
+def signUpPage(request):
+    return render(request, 'register.html')
 
 def register(request):
     if request.method == 'POST':
@@ -79,7 +55,7 @@ def register(request):
             else:
                 user = User.objects.create_user(username=username, email=email, password=password1)
                 user.save();
-                return redirect('home')
+                return redirect('loginPage')
         else:
             messages.info(request, 'Password Not The Same')
             return redirect('register')
@@ -87,23 +63,29 @@ def register(request):
         return render(request , 'register.html') 
 
 def booking(request):
-    return render(request, 'Booking.html')
+    flights = Flight.objects.all()
+    #booking = Booking() 
+    # origin =  flights.origin
+    # destination = flights.destination
+    # departure_date = flights.departure_date
+    # arrival_date = flights.arrival_date
+    # price = flights.price
+    # bookings = flights.bookings
+    # slot_left = flights.slot_left
+    # is_cancelled = flights.is_cancelled
+    return render(request, 'Booking.html', {'flight' : flights},  )
 
 def Bookings(request):
-    flight = Flight()
-    booking = Booking()
-    
-    #if request.method == 'POST':
+    # flight = Flight()
+    # booking = Booking()
 
-    ori = booking.origin = flight.origin
-    booking.destination = flight.destination
+    # booking.origin =
+    # booking.destination = flight.destination
     booking.departure_date = request.GET['departure_date']
     booking.num_passengers = request.GET['num_passengers']
     return redirect( 'home')
-#else:
-    print("it didt work")
 
 
 
 #flights = Flight.objects.filter(origin=origin, destination=destination, departure_date__gte=departure_date)
-#return render(request, 'bookings/flight_search_results.html', {'flights': flights, 'num_passengers': num_passengers})
+#return render(request, 'bookings/flight_search_results.html', {'flights': flights, 'num_passengers': num_passengers})arriva

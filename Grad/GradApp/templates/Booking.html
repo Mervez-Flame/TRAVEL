@@ -4,24 +4,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{% static 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'%}" rel='stylesheet'>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <title>SkyXpress Booking</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"  rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styleig.css' %}">
+    <title>SkyXtra Booking</title>
 </head>
 <body>
-    <h1>Please book your flight</h1>
+    <h1>Please book your flight</h1>     
 
-    <form action="{% url 'kings' % }" method="POST">
+    <form action="{% url 'kings' %}" method="POST">
         {% csrf_token %}
-        <input type="text" placeholder="Where are you?" name="origin">
-        <input type="text" placeholder="Where are you going?" name="destination">
-        <br>
-        <br>
-        <input type="text" placeholder="When do you want to leave" name="departure_date">
-        <input type="text" placeholder="Passenger(1 Adult, 1 Child etc.)" name="num_passengers">
+        {% if flight.is_cancelled %}
+            <select id="originSelect" name="origin" placeholder="Where are you?">
+                <option>Select an origin</option>
+                {% for flights in flight %}
+                    <option value="{{ flights.origin }}">{{ flights.origin }}</option>
+                {% endfor %}
+            </select>
+            
+            <select id="destinationSelect" name="destination" placeholder="Where to?">
+                {% for flights in flight %}
+                    <option value="{{ flights.destination}}">{{flights.destination}}</option>
+                {% endfor %}
+            </select>
 
-        <button type="send">Submit</button>
-        
+            <p>Departure Date: <span id="departureDate"></span></p>
+            <p>Arrival Date: <span id="arrivalDate"></span></p>
+            <p>Price: <span id="price"></span></p>
+            <p>Bookings: <span id="bookings"></span></p>
+            <p>Slots Left: <span id="slotsLeft"></span></p>
+
+            <p>
+                {%else%}
+                Flight available.
+                {%endif%}     
+            </p>
+        {% endif %}
     </form>
+
+
+    {% comment %} <script>
+        const originSelect = document.getElementById('originSelect');
+        const destinationSelect = document.getElementById('destinationSelect');
+        const departureDate = document.getElementById('departureDate');
+        const arrivalDate = document.getElementById('arrivalDate');
+        const price = document.getElementById('price');
+        const bookings = document.getElementById('bookings');
+        const slotsLeft = document.getElementById('slotsLeft');
+        
+        originSelect.addEventListener('change', function() {
+            const selectedOrigin = this.value;
+            
+            // Clear previous options and info
+            destinationSelect.innerHTML = '<option>Select a destination</option>';
+            departureDate.textContent = '';
+            arrivalDate.textContent = '';
+            price.textContent = '';
+            bookings.textContent = '';
+            slotsLeft.textContent = '';
+            
+            // Populate destination options and flight info based on selected origin
+            {% for flights in flight %}
+                if ("{{ flights.origin }}" === selectedOrigin) {
+                    const option = document.createElement('option');
+                    option.value = "{{ flights.destination }}";
+                    option.textContent = "{{ flights.destination }}";
+                    destinationSelect.appendChild(option);
+                    departureDate.textContent = "{{ flights.departure_date }}";
+                    arrivalDate.textContent = "{{ flights.arrival_date }}";
+                    price.textContent = "{{ flights.price }}";
+                    bookings.textContent = "{{ flights.bookings }}";
+                    slotsLeft.textContent = "{{ flights.slot_left }}";
+                }
+            {% endfor %}
+        });
+    </script> {% endcomment %}
+
+    <script>
+        const originSelect = document.getElementById('originSelect');
+        const destinationSelect = document.getElementById('destinationSelect');
+        const departureDate = document.getElementById('departureDate');
+        const arrivalDate = document.getElementById('arrivalDate');
+        const price = document.getElementById('price');
+        const bookings = document.getElementById('bookings');
+        const slotsLeft = document.getElementById('slotsLeft');
+        
+        function updateFlightInfo(selectedOrigin, selectedDestination) {
+            // Clear previous info
+            departureDate.textContent = '';
+            arrivalDate.textContent = '';
+            price.textContent = '';
+            bookings.textContent = '';
+            slotsLeft.textContent = '';
+            
+            // Populate flight info based on selected origin and destination
+            {% for flight in flights %}
+                if ("{{ flight.origin }}" === selectedOrigin && "{{ flight.destination }}" === selectedDestination) {
+                    departureDate.textContent = "{{ flight.departure_date }}";
+                    arrivalDate.textContent = "{{ flight.arrival_date }}";
+                    price.textContent = "{{ flight.price }}";
+                    bookings.textContent = "{{ flight.bookings }}";
+                    slotsLeft.textContent = "{{ flight.slot_left }}";
+                    break; // Stop loop after finding the matching flight
+                }
+            {% endfor %}
+        }
+        
+        originSelect.addEventListener('change', function() {
+            const selectedOrigin = this.value;
+            const selectedDestination = destinationSelect.value;
+            
+            if (selectedDestination !== 'Select a destination') {
+                updateFlightInfo(selectedOrigin, selectedDestination);
+            }
+        });
+        
+        destinationSelect.addEventListener('change', function() {
+            const selectedDestination = this.value;
+            const selectedOrigin = originSelect.value;
+            
+            if (selectedOrigin !== 'Select an origin') {
+                updateFlightInfo(selectedOrigin, selectedDestination);
+            }
+        });
+    </script>
+    
+    
+    <script src="{% static 'Booking.js' %}"></script>
 </body>
 </html>

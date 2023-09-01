@@ -1,8 +1,6 @@
 from django.db import models
 
-# Create your models here.
-from django.db import models
-
+# Create your models here 
 class Flight(models.Model):
     flight_number = models.CharField(max_length=10)
     origin = models.CharField(max_length=100)
