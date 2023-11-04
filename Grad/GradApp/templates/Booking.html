@@ -13,34 +13,88 @@
 
     <form action="{% url 'kings' %}" method="POST">
         {% csrf_token %}
-        {% if flight.is_cancelled %}
-            <select id="originSelect" name="origin" placeholder="Where are you?">
-                <option>Select an origin</option>
-                {% for flights in flight %}
-                    <option value="{{ flights.origin }}">{{ flights.origin }}</option>
-                {% endfor %}
-            </select>
-            
-            <select id="destinationSelect" name="destination" placeholder="Where to?">
-                {% for flights in flight %}
-                    <option value="{{ flights.destination}}">{{flights.destination}}</option>
-                {% endfor %}
-            </select>
-
-            <p>Departure Date: <span id="departureDate"></span></p>
-            <p>Arrival Date: <span id="arrivalDate"></span></p>
-            <p>Price: <span id="price"></span></p>
-            <p>Bookings: <span id="bookings"></span></p>
-            <p>Slots Left: <span id="slotsLeft"></span></p>
-
-            <p>
-                {%else%}
-                Flight available.
-                {%endif%}     
-            </p>
-        {% endif %}
+        {% if flight.count > 0 %}
+        <select id="originSelect" name="origin" placeholder="Where are you?">
+            <option>Select an origin</option>
+            {% for flights in flight %}
+                <option value="{{ flights.origin }}">{{ flights.origin }}</option>
+            {% endfor %}
+        </select>
+        
+        <select id="destinationSelect" name="destination" placeholder="Where to?">
+            <option> Select a destination</option>
+            {% for flights in flight %}
+                <option value="{{ flights.destination }}">{{ flights.destination }}</option>
+            {% endfor %}
+        </select>
     </form>
+    <a href="{% url 'showFlights' %}"></a>
+        <button id="search">Search Flights</button>
 
+        <p>Departure Date: <span id="departureDate"></span></p>
+        <p>Arrival Date: <span id="arrivalDate"></span></p>
+        <p>Price: <span id="price"></span></p>
+        <p>Bookings: <span id="bookings"></span></p>
+        <p>Slots Left: <span id="slotsLeft"></span></p>
+
+        {% comment %} <p>
+            {%else%}
+            Flight available.
+            {%endif%}     
+        </p> {% endcomment %}
+        {% endif %}
+
+
+        <script>
+            const originSelect = document.getElementById('originSelect');
+            const destinationSelect = document.getElementById('destinationSelect');
+            const departureDate = document.getElementById('departureDate');
+            const arrivalDate = document.getElementById('arrivalDate');
+            const price = document.getElementById('price');
+            const bookings = document.getElementById('bookings');
+            const slotsLeft = document.getElementById('slotsLeft');
+            const searchButton = document.getElementById('search');
+        
+            // Define an object to store flight data
+            let flightData = {};
+        
+            // Function to update flight data and HTML elements
+            function updateFlightInfo(selectedOrigin, selectedDestination) {
+                // Check if flight data for the selected origin and destination exists
+                if (flightData[selectedOrigin] && flightData[selectedOrigin][selectedDestination]) {
+                    const flightInfo = flightData[selectedOrigin][selectedDestination];
+                    departureDate.textContent = flightInfo.departure_date;
+                    arrivalDate.textContent = flightInfo.arrival_date;
+                    price.textContent = flightInfo.price;
+                    bookings.textContent = flightInfo.bookings;
+                    slotsLeft.textContent = flightInfo.slots_left;
+                } else {
+                    // Handle the case where flight data is not available
+                    departureDate.textContent = '';
+                    arrivalDate.textContent = '';
+                    price.textContent = '';
+                    bookings.textContent = '';
+                    slotsLeft.textContent = '';
+                }
+            }
+        
+            // Event listener for the "Search Flights" button click event
+            searchButton.addEventListener('click', function () {
+                const selectedOrigin = originSelect.value;
+                const selectedDestination = destinationSelect.value;
+        
+                // Make an AJAX request to fetch flight data based on selected origin and destination
+                fetch(`/get_flight_info/?origin=${selectedOrigin}&destination=${selectedDestination}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        flightData[selectedOrigin] = flightData[selectedOrigin] || {};
+                        flightData[selectedOrigin][selectedDestination] = data;
+                        updateFlightInfo(selectedOrigin, selectedDestination);
+                    })
+                    .catch(error => console.error(error));
+            });
+        </script>
+        
 
     {% comment %} <script>
         const originSelect = document.getElementById('originSelect');
@@ -50,7 +104,8 @@
         const price = document.getElementById('price');
         const bookings = document.getElementById('bookings');
         const slotsLeft = document.getElementById('slotsLeft');
-        
+        const search =document.getElementById('search')
+
         originSelect.addEventListener('change', function() {
             const selectedOrigin = this.value;
             
@@ -69,17 +124,59 @@
                     option.value = "{{ flights.destination }}";
                     option.textContent = "{{ flights.destination }}";
                     destinationSelect.appendChild(option);
-                    departureDate.textContent = "{{ flights.departure_date }}";
-                    arrivalDate.textContent = "{{ flights.arrival_date }}";
-                    price.textContent = "{{ flights.price }}";
-                    bookings.textContent = "{{ flights.bookings }}";
-                    slotsLeft.textContent = "{{ flights.slot_left }}";
+                    //departureDate.textContent = "{{ flights.departure_date }}";
+                    //arrivalDate.textContent = "{{ flights.arrival_date }}";
+                    //price.textContent = "{{ flights.price }}";
+                    //bookings.textContent = "{{ flights.bookings }}";
+                    //slotsLeft.textContent = "{{ flights.slot_left }}";
                 }
             {% endfor %}
         });
-    </script> {% endcomment %}
 
-    <script>
+        search.addEventListener('click', ()=>){
+            function updateFlightInfo(selectedOrigin, selectedDestination) {
+                // Clear previous info
+                departureDate.textContent = '';
+                arrivalDate.textContent = '';
+                price.textContent = '';
+                bookings.textContent = '';
+                slotsLeft.textContent = '';
+                
+                // Populate flight info based on selected origin and destination
+                {% for flights in flight %}
+                    if ()
+                        if ("{{ flights.origin }}" === selectedOrigin && "{{ flights.destination }}" === selectedDestination ) {
+                            departureDate.textContent = "{{ flights.departure_date }}";
+                            arrivalDate.textContent = "{{ flights.arrival_date }}";
+                            price.textContent = "{{ flights.price }}";
+                            bookings.textContent = "{{ flights.bookings }}";
+                            slotsLeft.textContent = "{{ flights.slot_left }}";
+                            break; // Stop loop after finding the matching flight
+                        }
+                {% endfor %}
+            }
+            
+            originSelect.addEventListener('change', function() {
+                const selectedOrigin = this.value;
+                const selectedDestination = destinationSelect.value;
+                
+                if (selectedDestination !== 'Select a destination') {
+                    updateFlightInfo(selectedOrigin, selectedDestination);
+                }
+            });
+            
+            destinationSelect.addEventListener('change', function() {
+                const selectedDestination = this.value;
+                const selectedOrigin = originSelect.value;
+                
+                if (selectedOrigin !== 'Select an origin') {
+                    updateFlightInfo(selectedOrigin, selectedDestination);
+                }
+            });
+        } 
+    </script>  {% endcomment %}
+
+    {% comment %} <script>
         const originSelect = document.getElementById('originSelect');
         const destinationSelect = document.getElementById('destinationSelect');
         const departureDate = document.getElementById('departureDate');
@@ -98,14 +195,15 @@
             
             // Populate flight info based on selected origin and destination
             {% for flight in flights %}
-                if ("{{ flight.origin }}" === selectedOrigin && "{{ flight.destination }}" === selectedDestination) {
-                    departureDate.textContent = "{{ flight.departure_date }}";
-                    arrivalDate.textContent = "{{ flight.arrival_date }}";
-                    price.textContent = "{{ flight.price }}";
-                    bookings.textContent = "{{ flight.bookings }}";
-                    slotsLeft.textContent = "{{ flight.slot_left }}";
-                    break; // Stop loop after finding the matching flight
-                }
+                if ()
+                    if ("{{ flight.origin }}" === selectedOrigin && "{{ flight.destination }}" === selectedDestination ) {
+                        departureDate.textContent = "{{ flight.departure_date }}";
+                        arrivalDate.textContent = "{{ flight.arrival_date }}";
+                        price.textContent = "{{ flight.price }}";
+                        bookings.textContent = "{{ flight.bookings }}";
+                        slotsLeft.textContent = "{{ flight.slot_left }}";
+                        break; // Stop loop after finding the matching flight
+                    }
             {% endfor %}
         }
         
@@ -126,9 +224,10 @@
                 updateFlightInfo(selectedOrigin, selectedDestination);
             }
         });
-    </script>
+    </script> {% endcomment %}
     
     
-    <script src="{% static 'Booking.js' %}"></script>
+    <script src="{% static 'booking.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

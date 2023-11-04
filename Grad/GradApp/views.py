@@ -2,13 +2,13 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from .models import Flight, Booking
-from django.http import HttpResponse
+from django.http import HttpResponse 
+from django.http import JsonResponse
 
 # Create your views here.
 
 def home (request):
     return render(request, 'home.html')
-
 def loginPage (request):
     return render(request, 'login_view.html')
 
@@ -64,10 +64,26 @@ def register(request):
 
 def booking(request):
     flights = Flight.objects.all()
-    #booking = Booking() 
+    flights = Flight.objects.filter(is_cancelled=False)
+    
+    # if request.method == 'POST':
+    #     origin = request.GET[origin]
+    #     destination = request.GET['destination']
+    
+    # if destination in request.GET:
+    #     keyword = request.GET[destination]
+    #     if keyword:
+    #         result = flights.objects.order_by('-created_date').filter(Q(destination_icontains=destination) | Q(here for origin_icontains=keyword))
+    #         U can implement count  = result.count()
+    # context = {
+    #     'result':result,
+    #     'count':count
+    #     }
+
+    #booking = Booking.objects.all() 
     # origin =  flights.origin
     # destination = flights.destination
-    # departure_date = flights.departure_date
+    # departure_date = flights.departure_datenb
     # arrival_date = flights.arrival_date
     # price = flights.price
     # bookings = flights.bookings
@@ -75,15 +91,30 @@ def booking(request):
     # is_cancelled = flights.is_cancelled
     return render(request, 'Booking.html', {'flight' : flights},  )
 
-def Bookings(request):
-    # flight = Flight()
-    # booking = Booking()
-
-    # booking.origin =
-    # booking.destination = flight.destination
-    booking.departure_date = request.GET['departure_date']
-    booking.num_passengers = request.GET['num_passengers']
-    return redirect( 'home')
+# def Bookings(request):
+#     if request.headers.get("x-requested-with") == "XMLHttpRequest" and request.method == "GET":
+#         origin = request.GET.get("origin")
+#         destination = request.GET.get("destination")
+        
+#         # Query the Flight model to get flight information
+#         try:
+#             flights = Flight.objects.get(origin=origin, destination=destination, is_cancelled=False)
+#         except Flight.DoesNotExist:
+#             return JsonResponse({"error": "Flight not found."}, status=404)
+        
+#         # Prepare the flight data as a JSON response
+#         flight_data = {
+#             "departure_date": flights.departure_date.strftime("%Y-%m-%d %H:%M:%S"),
+#             "arrival_date": flights.arrival_date.strftime("%Y-%m-%d %H:%M:%S"),
+#             "price": str(flights.price),
+#             "bookings": str(flights.bookings),
+#             "slot_left": str(flights .slot_left)
+#         }
+        
+#         return JsonResponse(flight_data)
+#     else:
+#         return JsonResponse({"error": "Invalid request."}, status=400)
+#     return redirect( 'home')
 
 
 
